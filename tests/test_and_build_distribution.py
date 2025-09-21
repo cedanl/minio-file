@@ -7,10 +7,13 @@ from pathlib import Path
 
 import pytest
 
+# Skip tests that require uv if not available
+uv_available = shutil.which("uv") is not None
 
 class TestPackageBuilding:
     """Test package can be built correctly."""
 
+    @pytest.mark.skipif(not uv_available, reason="uv not available")
     def test_package_can_be_built(self):
         """Test package builds without errors."""
         # Change to project root
