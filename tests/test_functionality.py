@@ -15,16 +15,6 @@ class TestMinioFileCore:
 
         assert callable(main)
 
-    def test_transport_module_functions(self):
-        """Test transport module has expected functions."""
-        from minio_file import transport
-
-        # Get public functions
-        functions = [x for x in dir(transport) if not x.startswith('_') and callable(getattr(transport, x))]
-
-        # Should have at least some functions
-        assert len(functions) > 0, "Transport module should have functions"
-
     def test_package_can_be_imported_multiple_times(self):
         """Test package can be imported multiple times without issues."""
         # First import
@@ -95,18 +85,17 @@ class TestModuleIntegration:
     def test_modules_can_import_each_other(self):
         """Test modules can import from each other if needed."""
         # Test cross-module imports work
-        from minio_file import minio_file, transport
+        from minio_file import minio_file
 
         # Both should be importable
-        assert transport is not None
         assert minio_file is not None
 
     def test_no_circular_imports(self):
         """Test there are no circular import issues."""
         # This test passes if imports complete without hanging
-        from minio_file import main, minio_file, transport
+        from minio_file import main, minio_file
 
-        assert all([transport, minio_file, main])
+        assert all([minio_file, main])
 
 
 class TestPackageMetadata:
