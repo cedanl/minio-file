@@ -10,7 +10,8 @@ authors = [
     {name = "Caspar Nijhuis", email = "caspar.nijhuis@gmail.com"}
 ]
 license = {text = "MIT"}
-readme = "README.md"
+# readme = "README.md"
+readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
