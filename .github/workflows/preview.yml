@@ -41,6 +41,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install -e ".[dev,test]"
+          uv pip install toml
       
       - name: Run tests
         run: |
@@ -48,18 +49,45 @@ jobs:
       
       - name: Create development version
         run: |
-          # Get current version from package
-          CURRENT_VERSION=$(python -c "import minio_file; print(minio_file.__version__)")
+          # Use Python to read version from pyproject.toml without importing the package
+          CURRENT_VERSION=$(uv run python -c "
+          import toml
+          with open('pyproject.toml', 'r') as f:
+              data = toml.load(f)
+              print(data['project']['version'])
+          ")
           DEV_VERSION="${CURRENT_VERSION}.dev${GITHUB_RUN_NUMBER}"
+          echo "Current version: $CURRENT_VERSION"
           echo "Development version: $DEV_VERSION"
           
-          # Update version in __init__.py
-          sed -i "s/__version__ = \".*\"/__version__ = \"$DEV_VERSION\"/" src/minio_file/__init__.py
+          # Update version in __init__.py using Python
+          uv run python -c "
+          import re
+          with open('src/minio_file/__init__.py', 'r') as f:
+              content = f.read()
+          content = re.sub(r'__version__ = \".*?\"', '__version__ = \"$DEV_VERSION\"', content)
+          with open('src/minio_file/__init__.py', 'w') as f:
+              f.write(content)
+          print('Updated __init__.py version')
+          "
           
-          # Update version in pyproject.toml
-          sed -i "s/version = \".*\"/version = \"$DEV_VERSION\"/" pyproject.toml
+          # Update version in pyproject.toml using Python
+          uv run python -c "
+          import toml
+          with open('pyproject.toml', 'r') as f:
+              data = toml.load(f)
+          data['project']['version'] = '$DEV_VERSION'
+          with open('pyproject.toml', 'w') as f:
+              toml.dump(data, f)
+          print('Updated pyproject.toml version')
+          "
           
           echo "Updated to version: $DEV_VERSION"
+          
+          # Verify the changes
+          echo "Checking updated files:"
+          grep "__version__" src/minio_file/__init__.py
+          grep "version =" pyproject.toml | head -1
       
       - name: Build wheels and source tarball
         run: |
