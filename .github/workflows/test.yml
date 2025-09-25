@@ -94,12 +94,12 @@ jobs:
     
     - name: Test installation from wheel
       run: |
-        # Create fresh environment and test installation
-        uv venv test-install
-        # Activate and test in one step to avoid shell issues
-        ./test-install/bin/python -m pip install dist/*.whl
+        # Create fresh environment with pip
+        uv venv test-install --seed
+        # Install using the virtual environment's pip
+        ./test-install/bin/pip install dist/*.whl
         ./test-install/bin/python -c "import minio_file; print(f'Successfully installed version {minio_file.__version__}')"
-    
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:

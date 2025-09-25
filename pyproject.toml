@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "minio-file"
-version = "2025.1.1"
+version = "2025.1.2"
 description = "Tool to manage MinIO connections and transfers."
 authors = [
     {name = "Caspar Nijhuis", email = "caspar.nijhuis@gmail.com"}
@@ -147,7 +147,7 @@ exclude_lines = [
 ]
 
 [tool.bumpversion]
-current_version = "2025.1.1"
+current_version = "2025.1.2"
 commit = true
 commit_args = "--no-verify"
 tag = true

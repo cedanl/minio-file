@@ -10,6 +10,7 @@ import pytest
 # Skip tests that require uv if not available
 uv_available = shutil.which("uv") is not None
 
+
 class TestPackageBuilding:
     """Test package can be built correctly."""
 
@@ -64,7 +65,7 @@ class TestPackageBuilding:
         # We could unzip and check contents here if needed
         wheel_file = wheel_files[0]
         assert wheel_file.name.startswith("minio_file-"), "Wheel file has wrong name"
-        assert "2025.1.1" in wheel_file.name, "Version not in wheel name"
+        assert "2025.1.2" in wheel_file.name, "Version not in wheel name"
 
 
 class TestInstallationFromBuilds:
@@ -188,23 +189,24 @@ class TestDevelopmentInstallation:
 
     def test_editable_install_reflects_changes(self):
         """Test editable install reflects code changes."""
-        import minio_file
         import os
-        
+
+        import minio_file
+
         package_path = minio_file.__file__
         normalized_path = os.path.normpath(package_path)
-        
+
         # Check if we're in development mode (src directory structure)
         # Use os.sep to handle both Windows and Unix path separators
         is_dev_mode = os.sep + 'src' + os.sep in normalized_path
-        
+
         # In CI environments, the package might be installed differently
         if not is_dev_mode:
             if 'CI' in os.environ or 'GITHUB_ACTIONS' in os.environ:
                 pytest.skip("Package not in development mode (acceptable in CI)")
             elif 'site-packages' in normalized_path:
                 pytest.skip("Package installed in site-packages rather than development mode")
-        
+
         assert is_dev_mode, f"Package should be in development mode, found at: {normalized_path}"
 
     def test_package_reloads_correctly(self):
