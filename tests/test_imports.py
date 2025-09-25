@@ -20,7 +20,7 @@ class TestImports:
         import minio_file
 
         assert hasattr(minio_file, '__version__')
-        assert minio_file.__version__ == "2025.1.5"
+        assert minio_file.__version__ == "2025.1.6"
 
     def test_main_module_import(self):
         """Test main minio_file module imports successfully."""

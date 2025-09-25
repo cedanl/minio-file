@@ -61,6 +61,7 @@ jobs:
       - name: Show build artifacts
         run: |
           ls -la dist/
+        shell: bash
       
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
