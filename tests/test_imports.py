@@ -17,12 +17,7 @@ class TestImports:
         """Test package version is available."""
         import minio_file
         assert hasattr(minio_file, '__version__')
-        assert minio_file.__version__ == "2025.1.3"
-        
-    def test_transport_module_import(self):
-        """Test transport module imports successfully."""
-        from minio_file import transport
-        assert transport is not None
+        assert minio_file.__version__ == "2025.1.4"
         
     def test_main_module_import(self):
         """Test main minio_file module imports successfully."""
@@ -47,14 +42,12 @@ class TestImports:
         
     def test_module_functions_exist(self):
         """Test that modules have callable functions."""
-        from minio_file import transport, minio_file as mf
+        from minio_file import minio_file as mf
         
         # Get non-private attributes
-        transport_funcs = [x for x in dir(transport) if not x.startswith('_')]
         main_funcs = [x for x in dir(mf) if not x.startswith('_')]
         
         # Should have at least some functions
-        assert len(transport_funcs) > 0, "Transport module should have functions"
         assert len(main_funcs) > 0, "Main module should have functions"
 
 
@@ -76,7 +69,7 @@ class TestPackageStructure:
         package_dir = os.path.dirname(minio_file.__file__)
         
         # Check for expected files
-        expected_files = ['__init__.py', 'minio_file.py', 'transport.py']
+        expected_files = ['__init__.py', 'minio_file.py']
         for file in expected_files:
             file_path = os.path.join(package_dir, file)
             assert os.path.exists(file_path), f"Expected file {file} not found"
